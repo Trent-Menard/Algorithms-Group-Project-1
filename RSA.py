@@ -6,6 +6,7 @@ Created on Tue Sep 13 11:37:11 2022
 """
 
 import math
+import pandas as pd #Dr. Hu said he wasn't against us using pandas
 
 class PublicUser:
     public_key = ""
