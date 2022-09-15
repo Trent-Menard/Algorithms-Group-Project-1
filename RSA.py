@@ -7,34 +7,33 @@ Created on Tue Sep 13 11:37:11 2022
 
 import math
 import sys
-import pandas as pd #Dr. Hu said he wasn't against us using pandas
+import random
 
 # class PublicUser:
 #     public_key = ""
 #     private_key = ""
     
 # Use Fermat's Little Theorem for parameters of pow() to gen p & q
-# base, power, %
-p_val = pow(30192, 43791, 65301)
-q_val = pow(30192, 43791, 65301)
-public_key = 0;
-phi = 0;
-e = 0;
+# Large prime numbers for testing; from https://bigprimes.org/
+p_val = 26699618156112777433
+q_val = 16464747126412153627
+n = p_val * q_val
+phi = (p_val - 1) * (q_val - 1)
+e = random.randrange(1000000, phi) # relatively prime to phi; encryption key
+    
+while not math.gcd(e, phi) == 1:
+    e = random.randrange(1000000, phi)
 
-    # if math.gcd(x, phi) == 1:
-    #     x = e;
-    #     break
+print(e)
 
 def encrypted_message():
     #create a dictionary to store more than one message?
     pass
     
-    
 def sign_message(sign):
     #I guess we just create a variable for the signature?
     pass
     
-
 def public_user():
     ans = int(input("\nAs a public user, what would you like to do?\n" +
                     "1. Send an encrypted message.\n" +
@@ -89,6 +88,5 @@ def prompt():
     else:
         print("Invalid choice.")
         prompt()
-
 
 prompt()
