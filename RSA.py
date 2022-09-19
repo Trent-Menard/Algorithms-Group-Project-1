@@ -5,7 +5,6 @@ Created on Tue Sep 13 11:37:11 2022
 @author: Trent Menard, Matt Wagers, Ryan Hasty
 """
 
-import math
 import sys
 import random
 
@@ -15,19 +14,52 @@ import random
     
 # Use Fermat's Little Theorem for parameters of pow() to gen p & q
 # Large prime numbers for testing; from https://bigprimes.org/
-p_val = 26699618156112777433
-q_val = 16464747126412153627
-n = p_val * q_val
-phi = (p_val - 1) * (q_val - 1)
-e = random.randrange(1, phi+1) # relatively prime to phi; encryption key
+MIN_PRIME_NUMBER = 1000000
+MAX_PRIME_NUMBER = 10000000
 
-while not math.gcd(e, phi) == 1: 
-    e = random.randrange(1, phi+1)
+# Generate random p & q val between 1 & 10 mil
+p_val = random.randint(MIN_PRIME_NUMBER, MAX_PRIME_NUMBER)
+q_val = random.randint(MIN_PRIME_NUMBER, MAX_PRIME_NUMBER) 
+all_candidates = set()
+prime_candidates = set()
+failed_prime_candidates = set()
 
-#print("D: ",d)
-print("E: ",e)
-print("N: ",n)
-print("Phi: ",phi)
+def FermatPrimalityTest(n):
+    # Arbitrairly test 20 values within range to verify primality
+    for a in range(1, 20):
+        test = random.randint(MIN_PRIME_NUMBER + 1, MAX_PRIME_NUMBER - 1)
+        all_candidates.add(test)
+        
+        if pow(test, n-1, n) == 1:
+            prime_candidates.add(n)
+        else:
+            failed_prime_candidates.add(n)
+            # print(p, " is NOT prime.")
+            # return False
+        
+    # print(p, " is prime!")
+    return True
+    
+# If p_val is not prime, generate another p_val
+while not FermatPrimalityTest(p_val):
+    p_val = random.randint(MIN_PRIME_NUMBER, MAX_PRIME_NUMBER)
+    
+# If q_val is not prime, generate another q_val
+while not FermatPrimalityTest(q_val):
+    q_val = random.randint(MIN_PRIME_NUMBER, MAX_PRIME_NUMBER)
+    
+    
+print("Generated p_val = " + str(p_val) + " & q_val = " + str(q_val) + "\n")
+print("Success: " + str(prime_candidates) + "\n")
+print("Failed: " + str(failed_prime_candidates) + "\n")
+print("All Candidates: " + str(all_candidates) + "\n")
+print("Error Ratio: " + str(len(failed_prime_candidates) / len(all_candidates)) + "%")
+
+# print("D: ",d)
+# print("E: ",e)
+# print("N: ",n)
+# print("Phi: ",phi)
+# print(e)
 
 def encrypted_message():
     #create a dictionary to store more than one message?
@@ -47,7 +79,7 @@ def public_user():
     if ans == 1:
         message = input("\nEnter a message: ")
         #call funtion to encrypt a message (message)
-        encrypt(message,e,n)
+        # encrypt(message,e,n)
     elif ans == 2:
         #call funtion to authenticate a digital signature
         pass
@@ -116,8 +148,5 @@ def e_gcd(a =1, b = 1):
     (x, y, d) = e_gcd(b, a%b)
     return y, x - a//b*y, d
 
-d = e_gcd(e,phi)
-d = d[0]
-
-encryptM = encrypt("Ths message is top secret af",e,n)
-print(decrypt(encryptM,d,n))
+# encryptM = encrypt("Ths message is top secret af",e,n)
+# print(decrypt(encryptM,d,n))
