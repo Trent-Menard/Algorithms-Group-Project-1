@@ -2,7 +2,7 @@
 """
 Created on Tue Sep 13 11:37:11 2022
 
-@author: Trent
+@author: Trent Menard, Matt Wagers, Ryan Hasty
 """
 
 import math
@@ -15,16 +15,26 @@ import random
     
 # Use Fermat's Little Theorem for parameters of pow() to gen p & q
 # Large prime numbers for testing; from https://bigprimes.org/
-p_val = 26699618156112777433
-q_val = 16464747126412153627
+#p_val = 26699618156112777433
+#q_val = 16464747126412153627
+p_val = 13
+q_val = 17
 n = p_val * q_val
 phi = (p_val - 1) * (q_val - 1)
-e = random.randrange(1000000, phi) # relatively prime to phi; encryption key
-    
-while not math.gcd(e, phi) == 1:
-    e = random.randrange(1000000, phi)
+e = random.randrange(1, phi+1) # relatively prime to phi; encryption key
+d = random.randrange(1, phi+1)
 
-print(e)
+while not math.gcd(e, phi) == 1: 
+    e = random.randrange(1, phi+1)
+ 
+while not e*d%phi == 1:
+    d = random.randrange(1, phi+1)
+
+
+print("D: ",d)
+print("E: ",e)
+print("N: ",n)
+print("Phi: ",phi)
 
 def encrypted_message():
     #create a dictionary to store more than one message?
@@ -44,6 +54,7 @@ def public_user():
     if ans == 1:
         message = input("\nEnter a message: ")
         #call funtion to encrypt a message (message)
+        encrypt(message,e,n)
     elif ans == 2:
         #call funtion to authenticate a digital signature
         pass
@@ -88,5 +99,24 @@ def prompt():
     else:
         print("Invalid choice.")
         prompt()
+        
+def encrypt(message,e,n):
+    upper_msg = message.upper()
+    encrypted = [ord(x) for x in upper_msg] # generate numerical alphabet
+    print("\nASCII VALUES OF MESSAGE: ",encrypted, "\n") # remove this line when ready
+    encryptedM = [pow(m,e,n) for m in encrypted] # encrypt each letter
+    print("C = (M^e)modn --> ", encryptedM, "\n") # remove this line when ready
+    return encryptedM
+    
+def decrypt(e_msg,d,n):
+    finish = ''
+    decrypted = [pow(c,d,n) for c in e_msg]
+    print("M = (C^d)modn -->",decrypted, "\n") # remove this line when ready
+    d_msg = [chr(x) for x in decrypted]
+    for x in d_msg:
+        finish += x
+    return finish
+    
 
-prompt()
+encryptM = encrypt("Ths message is top secret af",e,n)
+print(decrypt(encryptM,d,n))
