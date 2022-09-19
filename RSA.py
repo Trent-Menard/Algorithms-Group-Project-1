@@ -15,23 +15,16 @@ import random
     
 # Use Fermat's Little Theorem for parameters of pow() to gen p & q
 # Large prime numbers for testing; from https://bigprimes.org/
-#p_val = 26699618156112777433
-#q_val = 16464747126412153627
-p_val = 13
-q_val = 17
+p_val = 26699618156112777433
+q_val = 16464747126412153627
 n = p_val * q_val
 phi = (p_val - 1) * (q_val - 1)
 e = random.randrange(1, phi+1) # relatively prime to phi; encryption key
-d = random.randrange(1, phi+1)
 
 while not math.gcd(e, phi) == 1: 
     e = random.randrange(1, phi+1)
- 
-while not e*d%phi == 1:
-    d = random.randrange(1, phi+1)
 
-
-print("D: ",d)
+#print("D: ",d)
 print("E: ",e)
 print("N: ",n)
 print("Phi: ",phi)
@@ -117,6 +110,14 @@ def decrypt(e_msg,d,n):
         finish += x
     return finish
     
+def e_gcd(a =1, b = 1):
+    if b == 0:
+        return (1, 0, a)
+    (x, y, d) = e_gcd(b, a%b)
+    return y, x - a//b*y, d
+
+d = e_gcd(e,phi)
+d = d[0]
 
 encryptM = encrypt("Ths message is top secret af",e,n)
 print(decrypt(encryptM,d,n))
