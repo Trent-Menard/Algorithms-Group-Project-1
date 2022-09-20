@@ -9,29 +9,6 @@ import sys
 import random
 import math
 
-# class PublicUser:
-#     public_key = ""
-#     private_key = ""
-    
-# Fermat's Little Theorem for parameters of pow() (Fast Modular Exponentantiaion) to gen p & q
-MIN_PRIME_NUMBER = 1_000_000
-MAX_PRIME_NUMBER = 10_000_000
-
-# Generate random p & q val between 1 & 10 million
-p_val = random.randint(MIN_PRIME_NUMBER, MAX_PRIME_NUMBER)
-q_val = random.randint(MIN_PRIME_NUMBER, MAX_PRIME_NUMBER)
-all_candidates = set()
-prime_candidates = set()
-failed_prime_candidates = set()
-
-phi = (p_val - 1) * (q_val - 1)
-e = random.randint(1, phi + 1)
-n = p_val * q_val
-
-# Generate random e (public key) using Euclid's algorithm until its relatively prime to phi
-while not math.gcd(e, phi) == 1: 
-    e = random.randint(1, phi + 1)
-    
 def FermatPrimalityTest(n):
     # Arbitrairly test 20 values within range to verify primality
     for test in range(1, 20):
@@ -51,9 +28,13 @@ def encrypted_message():
     #create a dictionary to store more than one message?
     pass
     
-def sign_message(sign):
+def sign_message(sig_msg,d):
     #I guess we just create a variable for the signature?
-    pass
+    upper_msg = sig_msg.upper()
+    char_to_ascii = [ord(x) for x in upper_msg]
+    signed = [pow(m,d,n) for m in char_to_ascii]
+    print(signed)
+    return signed
     
 def public_user():
     ans = int(input("\nAs a public user, what would you like to do?\n" +
@@ -64,10 +45,10 @@ def public_user():
     
     if ans == 1:
         message = input("\nEnter a message: ")
-        #call funtion to encrypt a message (message)
-        encrypt(message,e,n)
+        encrypt(message,e,n) # encrypt function
     elif ans == 2:
-        #call funtion to authenticate a digital signature
+        #uncomment line below when we get d accessible
+        sign_message(sig_msg,d) #sign function
         pass
     elif ans == 3:
         sys.exit("Goodbye.")
@@ -87,7 +68,7 @@ def owner():
     elif ans == 2:
         #call function to signs a message
         sig = input("\nEnter a message: ")
-        sign_message(sig)
+        sign_message(sig,d)
     elif ans == 3:
         sys.exit("Goodbye.")
     else:
@@ -114,29 +95,54 @@ def prompt():
 def encrypt(message,e,n):
     upper_msg = message.upper()
     # Map char -> ASCII code
-    encrypted = [ord(x) for x in upper_msg]
-    print("\nASCII VALUES OF MESSAGE: ",encrypted, "\n")
+    char_to_ascii = [ord(x) for x in upper_msg]
     # Encrypt each ASCII code using Fast Modular Exponentiation with Public Key
-    encryptedM = [pow(m,e,n) for m in encrypted]
-    print("C = (M^e)modn --> ", encryptedM, "\n")
+    encryptedM = [pow(m,e,n) for m in char_to_ascii]
     return encryptedM
     
 def decrypt(e_msg,d,n):
     finish = ''
-    decrypted = [pow(c,d,n) for c in e_msg]
-    print("M = (C^d)modn -->",decrypted, "\n") # remove this line when ready
-    d_msg = [chr(x) for x in decrypted]
+    # Decrypt using Fast Modular Exponentiation
+    char_to_ascii = [pow(c,d,n) for c in e_msg]
+    # Map ASCII code-> char
+    d_msg = [chr(x) for x in char_to_ascii]
     for x in d_msg:
         finish += x
     return finish
     
+# Fast Euclidean Algorithm to calculate d
 def e_gcd(a = 1, b = 1):
     if b == 0:
         return (1, 0, a)
     (x, y, d) = e_gcd(b, a%b)
     return y, x - a//b*y, d
 
-prompt()
+# class PublicUser:
+#     public_key = ""
+#     private_key = ""
+    
+# Fermat's Little Theorem for parameters of pow() (Fast Modular Exponentantiaion) to gen p & q
+MIN_PRIME_NUMBER = 1_000_000
+MAX_PRIME_NUMBER = 10_000_000
+
+# Generate random p & q val between 1 & 10 million
+p_val = random.randint(MIN_PRIME_NUMBER, MAX_PRIME_NUMBER)
+q_val = random.randint(MIN_PRIME_NUMBER, MAX_PRIME_NUMBER)
+all_candidates = set()
+prime_candidates = set()
+failed_prime_candidates = set()
+
+n = p_val * q_val
+phi = (p_val - 1) * (q_val - 1)
+e = random.randint(1, phi + 1)
+
+# Generate random e (public key) using Euclid's algorithm until its relatively prime to phi
+while not math.gcd(e, phi) == 1: 
+    e = random.randint(1, phi + 1)
+
+#this is how we get d
+d = e_gcd(e,phi)
+d = d[0]
 
 # If p_val is not prime, generate another p_val
 while not FermatPrimalityTest(p_val):
@@ -145,7 +151,9 @@ while not FermatPrimalityTest(p_val):
 # If q_val is not prime, generate another q_val
 while not FermatPrimalityTest(q_val):
     q_val = random.randint(MIN_PRIME_NUMBER, MAX_PRIME_NUMBER)
-    
+
+prompt()
+
 print("Generated p_val = " + str(p_val) + " & q_val = " + str(q_val) + "\n")
 print("Success: " + str(prime_candidates) + "\n")
 print("Failed: " + str(failed_prime_candidates) + "\n")
