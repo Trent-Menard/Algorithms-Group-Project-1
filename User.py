@@ -74,18 +74,20 @@ class Public(User):
 class Private(User):
     def __init__(self):
         super().__init__()
-        self.d = math.gcd(self.public_key, self.phi)
+        self.d = e_gcd(self.public_key, self.phi) # Figure out if pos 0, 1, or 2
         
     def decrypt(self, e_msg,d,n):
-        finish = ''
-        # Decrypt using Fast Modular Exponentiation
-        char_to_ascii = [pow(c,d,n) for c in e_msg]
-        # Map ASCII code-> char
-        d_msg = [chr(x) for x in char_to_ascii]
-        for x in d_msg:
-            finish += x
+        print("This is broken. :(")
+        # finish = ''
+        # # Decrypt using Fast Modular Exponentiation
+        # char_to_ascii = [pow(c,d,n) for c in e_msg]
+        # print(char_to_ascii)
+        # # Map ASCII code-> char
+        # d_msg = [chr(x) for x in char_to_ascii]
+        # for x in d_msg:
+        #     finish += x
             
-        return finish
+        # return finish
     
-        (x, y, d) = e_gcd(e_gcd.b, e_gcd.a%e_gcd.b)
-        return y, x - e_gcd.a//e_gcd.b*y, d
+        # (x, y, d) = e_gcd(e_gcd.b, e_gcd.a%e_gcd.b)
+        # return y, x - e_gcd.a//e_gcd.b*y, d
