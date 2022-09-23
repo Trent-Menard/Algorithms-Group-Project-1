@@ -2,7 +2,7 @@
 """
 Created on Wed Sep 21 21:47:17 2022
 
-@author: Trent
+@authors: Trent Menard, Ryan Hasty, Matt Wagers
 """
 
 class RSA_Menu:
