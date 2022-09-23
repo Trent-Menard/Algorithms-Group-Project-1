@@ -92,7 +92,7 @@ class Private(User):
         (x, y, d) = e_gcd(e_gcd.b, e_gcd.a%e_gcd.b)
         return y, x - e_gcd.a//e_gcd.b*y, d
     
-    def sign_message(sig_msg,d,n):
+    def sign_message(self, sig_msg,d,n):
         upper_msg = sig_msg.upper()
         char_to_ascii = [ord(x) for x in upper_msg]
         signed = [pow(m,d,n) for m in char_to_ascii]
