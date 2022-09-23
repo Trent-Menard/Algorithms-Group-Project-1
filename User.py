@@ -2,7 +2,7 @@
 """
 Created on Wed Sep 21 15:34:17 2022
 
-@author: Trent
+@authors: Trent Menard, Ryan Hasty, Matt Wagers
 """
 
 import random
@@ -65,7 +65,7 @@ class Public(User):
         upper_msg = message.upper()
         char_to_ascii = [ord(x) for x in upper_msg]
         # Encrypt each ASCII code using Fast Modular Exponentiation with Public Key
-        encryptedM = [pow(m,e,n) for m in char_to_ascii]
+        encryptedM = [pow(m, e, n) for m in char_to_ascii]
         
         self.encrypted_msg = encryptedM
         print("Encrypted Message: " + str(self.encrypted_msg))
@@ -76,28 +76,27 @@ class Private(User):
         super().__init__()
         self.d = e_gcd(self.public_key, self.phi) # Figure out if pos 0, 1, or 2
         
-    def decrypt(self, e_msg,d,n):
+    def decrypt(self, e_msg, d, n):
         print("This is broken. :(")
-        # finish = ''
-        # # Decrypt using Fast Modular Exponentiation
-        # char_to_ascii = [pow(c,d,n) for c in e_msg]
-        # print(char_to_ascii)
-        # # Map ASCII code-> char
-        # d_msg = [chr(x) for x in char_to_ascii]
-        # for x in d_msg:
-        #     finish += x
-            
-        # return finish
+        finish = ''
+        # Decrypt using Fast Modular Exponentiation
+        char_to_ascii = [pow(c, d, n) for c in e_msg] 
+        print(char_to_ascii)
+        # Map ASCII code-> char
+        d_msg = [chr(x) for x in char_to_ascii]
+        for x in d_msg:
+            finish += x
+        return finish
     
-        (x, y, d) = e_gcd(e_gcd.b, e_gcd.a%e_gcd.b)
-        return y, x - e_gcd.a//e_gcd.b*y, d
+        #(x, y, d) = e_gcd(e_gcd.b, e_gcd.a%e_gcd.b)
+        #return y, x - e_gcd.a//e_gcd.b*y, d
     
-    def sign_message(self, sig_msg,d,n):
+    def sign_message(self, sig_msg, d, n):
         upper_msg = sig_msg.upper()
         char_to_ascii = [ord(x) for x in upper_msg]
-        signed = [pow(m,d,n) for m in char_to_ascii]
+        signed = [pow(m, d, n) for m in char_to_ascii]
         print(signed)
         return signed
 
-        # (x, y, d) = e_gcd(e_gcd.b, e_gcd.a%e_gcd.b)
-        # return y, x - e_gcd.a//e_gcd.b*y, d
+        #(x, y, d) = e_gcd(e_gcd.b, e_gcd.a%e_gcd.b)
+        #return y, x - e_gcd.a//e_gcd.b*y, d
