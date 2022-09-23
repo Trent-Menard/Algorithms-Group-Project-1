@@ -101,4 +101,3 @@ class Private(User):
 
         # (x, y, d) = e_gcd(e_gcd.b, e_gcd.a%e_gcd.b)
         # return y, x - e_gcd.a//e_gcd.b*y, d
-
