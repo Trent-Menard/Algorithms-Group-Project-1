@@ -24,6 +24,13 @@ def FermatPrimalityTest(n):
             return True
     # Pass Fermat test if all 20 tests pass
 
+# Extended Euclidean Algorithm to calculate d
+def e_gcd(a = 1, b = 1):
+    if b == 0:
+        return (1, 0, a)
+    (x, y, d) = e_gcd(b, a%b)
+    return y, x - a//b*y, d
+
 class User:
     
     def __init__(self):
@@ -40,12 +47,12 @@ class User:
         
         n = tmp_p_val * tmp_q_val
         tmp_phi = (tmp_p_val - 1) * (tmp_q_val - 1)
-        e = random.randint(1, tmp_phi + 1)
+        e = random.randint(1, tmp_phi)
         
         # Generate random e (public key) using Euclid's algorithm until its relatively prime to phi
-        while not math.gcd(e, tmp_phi) == 1: 
-            e = random.randint(1, tmp_phi + 1)
-        
+        while not math.gcd(e, tmp_phi) == 1:
+            e = random.randint(1, tmp_phi)
+            
         self.public_key = e
         self.length = n
         self.phi = tmp_phi
@@ -80,5 +87,5 @@ class Private(User):
             
         return finish
     
-        (x, y, d) = math.gcd(math.gcd.b, math.gcd.a%math.gcd.b)
-        return y, x - math.gcd.a//math.gcd.b*y, d
+        (x, y, d) = e_gcd(e_gcd.b, e_gcd.a%e_gcd.b)
+        return y, x - e_gcd.a//e_gcd.b*y, d
