@@ -7,7 +7,7 @@ Created on Wed Sep 21 21:53:37 2022
 
 import User
 
-def public_user():
+def public_user(e,n):
     ans = ""
     ans = str(input("""
     As a public user, what would you like to do?
@@ -21,27 +21,28 @@ def public_user():
         print("Message encrypted and sent.")
         return e_msg
     elif ans == "2":
+        
+        if len(signed_msgs) == 0:
+            print("\nThere are no signatures...")
+            return
+        
         index = 1
         print("\nThe following messages are available:\n\t")
         for x in signed_msgs: # list authenticated msgs as well as authenticate
             auth = User.authenticate(signed_msgs[index-1], e, n)
-            print(auth)
+            print(str(index) + ": " , auth)
             index+=1
-        
-        
-        # help me lol this code is awful ik
-        # Which message do you want to decrypt
-        #choice = int(input("\nEnter your choice: "))
-        
+       
+        choice = int(input("\nEnter your choice: "))
         # NOT SURE HOW TO DO THIS PART PROPERLY
-        print("Signature is valid.")
-        
-        public_user()
+        if choice in signed_msgs:
+            print("signature is valid")
+        return
+    
     else:
-        print("\nThere are no signatures...")
         prompt()
     
-def owner():
+def owner(d,n):
     ans = ""
     ans = str(input(""" 
     As the owner of the keys, what would you like to do?
@@ -56,11 +57,10 @@ def owner():
         for x in myMsgs:
             print(" ",str(index) + ". (Length =",str(len(x)) + ")")
             index+=1
-        
         # Which message do you want to decrypt
         choice = int(input("\nEnter your choice: "))
         print("Decrypted Message: ", User.decrypt(myMsgs[choice-1], d, n))
-        owner()
+        owner(d,n)
             
     elif ans == "2":
         #call function to signs a message
@@ -83,12 +83,10 @@ def prompt():
     Enter your choice: """))
     if ans == "1":
         global myMsgs # my encrypted messages (length = n)
-        myMsgs += [public_user()] # store result from public_user into list
-        public_user()
+        myMsgs.append([public_user(e,n)])# store result from public_user into list
     elif ans == "2":
         global signed_msgs
-        signed_msgs += [owner()]
-        owner()
+        signed_msgs.append([owner(d,n)])
     elif ans == "3":
         return False
     else:

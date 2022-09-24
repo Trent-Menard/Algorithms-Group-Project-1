@@ -73,8 +73,7 @@ def decrypt(e_msg, d, n):
     return finish
 
 def sign_message(sig_msg, d, n):
-    upper_msg = sig_msg.upper()
-    char_to_ascii = [ord(x) for x in upper_msg]
+    char_to_ascii = [ord(x) for x in sig_msg]
     signed = [pow(m, d, n) for m in char_to_ascii]
     return signed
 
