@@ -15,13 +15,15 @@ decrypted_message = None
 sig_msg = None
 d_sig_msg = None
 
+public_User = Public()
+private_User = Private()
+
 while repeat_Menu:
     menu_Result = RSA_Menu().get_Input()
     
     if menu_Result == 1:
-        public_User = Public()
-        ans = int(input(RSA_Menu.PUBLIC_USER_MENU))
         
+        ans = int(input(RSA_Menu.PUBLIC_USER_MENU))
         if menu_Result == 1:
             message = input("\nEnter a message: ")
             encrypted_message = public_User.encrypt(message,public_User.public_key,public_User.length)
@@ -29,7 +31,6 @@ while repeat_Menu:
             d_sig_msg = public_User.encrypt(sig_msg, public_User.public_key, public_User.length)
     
     elif menu_Result == 2:
-        private_User = Private()
         ans = int(input(RSA_Menu.PRIVATE_USER_MENU))
         
         if ans == 1:
