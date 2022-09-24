@@ -2,7 +2,7 @@
 """
 Created on Wed Sep 21 15:34:17 2022
 
-@author: Trent, Ryan, Matt
+@author: Trent
 """
 
 import random
