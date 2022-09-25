@@ -60,6 +60,7 @@ class User:
         self.length = n
         self.phi = tmp_phi
         self.encrypted_messages = []
+        self.decrypted_messages = []
         self.digital_signatures = []
             
 class Public(User):
@@ -74,34 +75,35 @@ class Public(User):
         encryptedM = [pow(m, e, n) for m in char_to_ascii]
         
         self.encrypted_msg = encryptedM
-        print("Encrypted Message: " + str(self.encrypted_msg))
         
         self.encrypted_messages.append(encryptedM)
         return encryptedM
+    
+    def authenticate(signed_msg,e,n):
+        # Decrypt using Fast Modular Exponentiation
+        char_to_ascii = [pow(s, e, n) for s in signed_msg]
+        # Map ASCII code-> char
+        d_msg = [chr(x) for x in char_to_ascii]
+        return ''.join(d_msg)
 
 class Private(User):
-    def __init__(self):       
+    def __init__(self):
         super().__init__()
         self.d = e_gcd(self.public_key, self.phi)[0]%self.phi
         
     def decrypt(self, e_msg, d, n):
-        finish = ''
         # Decrypt using Fast Modular Exponentiation
         char_to_ascii = [pow(c, d, n) for c in e_msg] 
         # Map ASCII code-> char
         d_msg = [chr(x) for x in char_to_ascii]
-        for x in d_msg:
-            finish += x
-            
-        print(finish)
+        finish = ''.join(d_msg)
+        self.decrypted_messages.append(finish)
         return finish
-    
-        #(x, y, d) = e_gcd(e_gcd.b, e_gcd.a%e_gcd.b)
-        #return y, x - e_gcd.a//e_gcd.b*y, d
     
     def sign_message(self, sig_msg, d, n):
         upper_msg = sig_msg.upper()
         char_to_ascii = [ord(x) for x in upper_msg]
         signed = [pow(m, d, n) for m in char_to_ascii]
-        print(signed)
+        
+        self.digital_signatures.append(signed)
         return signed
