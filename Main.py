@@ -19,6 +19,7 @@ private_User = Private()
 
 # This program may represent either a Public or Private User w/ unique keys & attributes
 # For simplicity's sake, only actions among 1 Public and 1 Private User are demonstrated.
+# IF YOU GET THE E IS UNDEFINED ERROR PLEASE CLOSE THE CONSOLE (KERNEL) AND RUN AGAIN.
 
 def user_menu():
     repeat_Menu = True
@@ -41,10 +42,12 @@ def user_menu():
                         print("There are no digital signatures to authenticate.")
                         continue
                     
-                    public_User.authenticate(message, public_User.public_key, public_User.length)
+                    for idx, val in enumerate(private_User.digital_signatures):
+                        print(idx + 1, " ", val)
                     
-                    print("Signature is valid?")
-            
+                    ans = int(input("\nPlease select a signature to validate: "))
+                    print("Signed: ", public_User.authenticate(private_User.digital_signatures[ans-1], public_User.public_key, public_User.length))
+                    
             elif menu_Result == 2:
                 ans = int(input(RSA_Menu.PRIVATE_USER_MENU))
                 
@@ -55,10 +58,9 @@ def user_menu():
                         continue
                     
                     print("Encypted messages available:\n")
-                    index = 1
-                    for x in public_User.encrypted_messages:
-                        print(" ",str(index) + ". (Length =",str(len(x)) + ")")
-                        index += 1
+                    
+                    for idx, val in enumerate(public_User.encrypted_messages):
+                        print(idx + 1, ": (length =", str(len(val)) + str(")"))
                     
                     ans = int(input("Please select the message index to decrypt: "))
                     

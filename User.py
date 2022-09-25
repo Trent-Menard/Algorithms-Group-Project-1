@@ -79,7 +79,7 @@ class Public(User):
         self.encrypted_messages.append(encryptedM)
         return encryptedM
     
-    def authenticate(signed_msg,e,n):
+    def authenticate(self, signed_msg,e,n):
         # Decrypt using Fast Modular Exponentiation
         char_to_ascii = [pow(s, e, n) for s in signed_msg]
         # Map ASCII code-> char
